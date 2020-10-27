@@ -1,5 +1,6 @@
 package touro.snake;
 
+import touro.snake.strategy.DirectionStrategy;
 import touro.snake.strategy.komendant.AstarStrategy;
 
 import javax.sound.sampled.AudioInputStream;
@@ -14,7 +15,7 @@ public class SnakeMain {
         // Set up all class dependencies here.
 
         SnakeHeadStateMachine snakeHeadStateMachine = new SnakeHeadStateMachine(Direction.West);
-        Snake snake = new Snake(snakeHeadStateMachine, new AstarStrategy());
+        Snake snake = new Snake(snakeHeadStateMachine, new DirectionStrategy());
         FoodFactory foodFactory = new FoodFactory();
         try {
             InputStream inputStream = Garden.class.getClassLoader().getResourceAsStream("EatNoise.wav");
