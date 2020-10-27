@@ -28,7 +28,7 @@ public class AstarStrategy implements SnakeStrategy {
         while (!current.equals(food)) {
             current = open.get(0);
             for (Node node : open) {
-                if (node.getCost() < current.getCost())  {
+                if (node.getCost() < current.getCost()) {
                     current = node;
                 }
             }
