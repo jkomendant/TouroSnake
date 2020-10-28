@@ -1,82 +1,72 @@
 package touro.snake.strategy.komendant;
 
-import touro.snake.Direction;
-import touro.snake.Food;
-import touro.snake.Garden;
-import touro.snake.Snake;
+import touro.snake.*;
 import touro.snake.strategy.SnakeStrategy;
 import touro.snake.strategy.astar.Node;
-
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class AstarStrategy implements SnakeStrategy {
 
     @Override
     public void turnSnake(Snake snake, Garden garden) {
         Direction[] directions = Direction.values();
-        Food gardenFood = garden.getFood();
-        if (gardenFood == null) {
+        Food food = garden.getFood();
+        Square head = snake.getHead();
+
+        if (food == null) {
             return;
         }
-        Node food = new Node(gardenFood);
-        Node head = new Node(snake.getHead());
 
-        ArrayList<Node> open = new ArrayList<>();
-        ArrayList<Node> closed = new ArrayList<>();
-        open.add(head);
-        Node current = open.get(0);
-        while (!current.equals(food)) {
-            current = open.get(0);
-            for (Node node : open) {
-                if (node.getCost() < current.getCost()) {
-                    current = node;
-                }
-            }
+        List<Node> open = new ArrayList<>();
+        List<Node> closed = new ArrayList<>();
+
+        open.add(new Node(snake.getHead()));
+
+        while (!open.isEmpty()) {
+            Node current = getLowestCost(open);
             open.remove(current);
             closed.add(current);
-            for (Direction d : directions) {
-                Node neighbor = new Node(current.moveTo(d));
-                if (snake.contains(neighbor) || !neighbor.inBounds() || closed.contains(neighbor)) {
+
+            if (current.equals(food)) {
+                Node firstChild = getFirstChild(head, current);
+                Direction direction = head.directionTo(firstChild);
+                snake.turnTo(direction);
+            }
+
+            for(Direction direction : directions){
+                Node neighbor = new Node(current.moveTo(direction), current, food);
+                if(!neighbor.inBounds() || snake.contains(neighbor) || closed.contains(neighbor)){
                     continue;
                 }
-                if (open.contains(neighbor)) {
-                    int neighborIndex = open.indexOf(neighbor);
-                    Node oldNeighbor = open.get(neighborIndex);
-                    Node newNeighbor = new Node(neighbor, current, food);
-
-                    if (newNeighbor.getCost() < oldNeighbor.getCost()) {
-                        open.set(neighborIndex, newNeighbor);
+                int index = open.indexOf(neighbor);
+                if(index != -1){
+                    Node oldNeighbor = open.get(index);
+                    if(neighbor.getCost() < oldNeighbor.getCost()){
+                        open.remove(index);
+                        open.add(neighbor);
                     }
                 }
-                if (!open.contains(neighbor)) {
-                    Node node = new Node(neighbor, current, food);
-                    open.add(node);
+                else {
+                    open.add(neighbor);
                 }
             }
 
         }
-
-        Node path = new Node(current);
-        while (current != head) {
-            path = current;
-            current = current.getParent();
-        }
-
-        Direction direction;
-        if (path.getX() == head.getX() && path.getY() == head.getY() - 1) {
-            direction = Direction.North;
-        } else if (path.getX() == head.getX() && path.getY() == head.getY() + 1) {
-            direction = Direction.South;
-        } else if (path.getX() == head.getX() + 1 && path.getY() == head.getY()) {
-            direction = Direction.East;
-        } else if (path.getX() == head.getX() - 1 && path.getY() == head.getY()) {
-            direction = Direction.West;
-        } else {
-            throw new RuntimeException("ERROR: There is no where to turn");
-        }
-
-        snake.turnTo(direction);
-
     }
 
+    private Node getLowestCost(List<Node> nodes){
+        return nodes.stream()
+                .min(Comparator.comparingDouble(Node::getCost))
+                .get();
+    }
+
+    public Node getFirstChild(Square head, Node end){
+        Node n = end;
+        while (!n.getParent().equals(head)){
+            n = n.getParent();
+        }
+        return n;
+    }
 }
