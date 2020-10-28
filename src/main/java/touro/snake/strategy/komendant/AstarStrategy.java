@@ -33,6 +33,7 @@ public class AstarStrategy implements SnakeStrategy {
                 Node firstChild = getFirstChild(head, current);
                 Direction direction = head.directionTo(firstChild);
                 snake.turnTo(direction);
+                break;
             }
 
             for(Direction direction : directions){
