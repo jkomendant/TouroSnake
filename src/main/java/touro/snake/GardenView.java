@@ -9,7 +9,7 @@ public class GardenView extends JComponent {
 
     private final Garden garden;
     public static final int CELL_SIZE = 10;
-    private AstarStrategy aStarStrategy;
+    private final AstarStrategy aStarStrategy;
 
     public GardenView(Garden garden, AstarStrategy aStarStrategy) {
         this.garden = garden;
