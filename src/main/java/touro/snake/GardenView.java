@@ -1,6 +1,6 @@
 package touro.snake;
 
-import touro.snake.strategy.komendant.AstarStrategy;
+import touro.snake.strategy.astar.komendant.AstarStrategy;
 
 import javax.swing.*;
 import java.awt.*;
