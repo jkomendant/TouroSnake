@@ -4,6 +4,7 @@ import touro.snake.*;
 import touro.snake.strategy.SnakeStrategy;
 import touro.snake.strategy.astar.Node;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -55,6 +56,16 @@ public class AstarStrategy implements SnakeStrategy {
             }
 
         }
+    }
+
+    @Override
+    public List<Square> getPath() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Square> getSearchSpace() {
+        return Collections.emptyList();
     }
 
     private Node getLowestCost(List<Node> nodes){
