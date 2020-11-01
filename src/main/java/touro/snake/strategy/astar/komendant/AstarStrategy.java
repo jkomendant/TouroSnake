@@ -1,4 +1,4 @@
-package touro.snake.strategy.komendant;
+package touro.snake.strategy.astar.komendant;
 
 import touro.snake.*;
 import touro.snake.strategy.SnakeStrategy;
@@ -9,6 +9,8 @@ import java.util.List;
 
 public class AstarStrategy implements SnakeStrategy {
 
+    List<Node> open = new ArrayList<>();
+    List<Node> closed = new ArrayList<>();
     List<Square> path = new ArrayList<>();
     List<Square> searchSpace = new ArrayList<>();
 
@@ -18,15 +20,22 @@ public class AstarStrategy implements SnakeStrategy {
         Food food = garden.getFood();
         Square head = snake.getHead();
 
+        open.clear();
+        closed.clear();
+        path.clear();
+        searchSpace.clear();
+
         if (food == null) {
             return;
         }
 
-        List<Node> open = new ArrayList<>();
-        List<Node> closed = new ArrayList<>();
-
         open.add(new Node(snake.getHead()));
 
+        findFoodPath(food, head, snake, directions);
+
+    }
+
+    public void findFoodPath(Food food, Square head, Snake snake, Direction[] directions){
         while (!open.isEmpty()) {
             Node current = getLowestCost(open);
             open.remove(current);
@@ -39,26 +48,28 @@ public class AstarStrategy implements SnakeStrategy {
                 path.add(new Square(current.getX(), current.getY()));
                 break;
             }
+            addChildren(snake, food, directions, current);
+        }
+    }
 
-            for(Direction direction : directions){
-                Node neighbor = new Node(current.moveTo(direction), current, food);
-                if(!neighbor.inBounds() || snake.contains(neighbor) || closed.contains(neighbor)){
-                    continue;
-                }
-                int index = open.indexOf(neighbor);
-                if(index != -1){
-                    Node oldNeighbor = open.get(index);
-                    if(neighbor.getCost() < oldNeighbor.getCost()){
-                        open.remove(index);
-                        open.add(neighbor);
-                    }
-                }
-                else {
+    public void addChildren(Snake snake, Food food, Direction[] directions, Node current){
+        for(Direction direction : directions){
+            Node neighbor = new Node(current.moveTo(direction), current, food);
+            if(!neighbor.inBounds() || snake.contains(neighbor) || closed.contains(neighbor)){
+                continue;
+            }
+            int index = open.indexOf(neighbor);
+            if(index != -1){
+                Node oldNeighbor = open.get(index);
+                if(neighbor.getCost() < oldNeighbor.getCost()){
+                    open.remove(index);
                     open.add(neighbor);
-                    searchSpace.add(neighbor);
                 }
             }
-
+            else {
+                open.add(neighbor);
+                searchSpace.add(new Square(neighbor.getX(), neighbor.getY()));
+            }
         }
     }
 
