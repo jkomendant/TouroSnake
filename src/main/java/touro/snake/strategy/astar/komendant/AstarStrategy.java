@@ -1,4 +1,4 @@
-package touro.snake.strategy.komendant;
+package touro.snake.strategy.astar.komendant;
 
 import touro.snake.*;
 import touro.snake.strategy.SnakeStrategy;
@@ -9,6 +9,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AstarStrategy implements SnakeStrategy {
+
+    List<Square> path = new ArrayList<>();
+    List<Square> searchSpace = new ArrayList<>();
 
     @Override
     public void turnSnake(Snake snake, Garden garden) {
@@ -34,6 +37,7 @@ public class AstarStrategy implements SnakeStrategy {
                 Node firstChild = getFirstChild(head, current);
                 Direction direction = head.directionTo(firstChild);
                 snake.turnTo(direction);
+                path.add(new Square(current.getX(), current.getY()));
                 break;
             }
 
@@ -52,6 +56,7 @@ public class AstarStrategy implements SnakeStrategy {
                 }
                 else {
                     open.add(neighbor);
+                    searchSpace.add(neighbor);
                 }
             }
 
@@ -60,12 +65,12 @@ public class AstarStrategy implements SnakeStrategy {
 
     @Override
     public List<Square> getPath() {
-        return Collections.emptyList();
+        return path;
     }
 
     @Override
     public List<Square> getSearchSpace() {
-        return Collections.emptyList();
+        return searchSpace;
     }
 
     private Node getLowestCost(List<Node> nodes){
