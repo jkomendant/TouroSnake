@@ -4,7 +4,6 @@ import touro.snake.*;
 import touro.snake.strategy.SnakeStrategy;
 import touro.snake.strategy.astar.Node;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
