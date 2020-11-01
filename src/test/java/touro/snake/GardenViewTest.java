@@ -1,8 +1,7 @@
 package touro.snake;
 
 import org.junit.Test;
-import touro.snake.strategy.astar.komendant.AstarStrategy;
-import touro.snake.strategy.astar.schwimmer.AStarStrategy;
+import touro.snake.strategy.komendant.AstarStrategy;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package touro.snake.strategy.astar.komendant;
+package touro.snake.strategy.komendant;
 
 import touro.snake.*;
 import touro.snake.strategy.SnakeStrategy;
