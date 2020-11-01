@@ -30,7 +30,6 @@ public class AstarStrategy implements SnakeStrategy {
         }
 
         open.add(new Node(snake.getHead()));
-
         findFoodPath(food, head, snake, directions);
 
     }
@@ -42,10 +41,13 @@ public class AstarStrategy implements SnakeStrategy {
             closed.add(current);
 
             if (current.equals(food)) {
+                while (!current.getParent().equals(head)) {
+                    current = current.getParent();
+                    path.add(current);
+                }
                 Node firstChild = getFirstChild(head, current);
                 Direction direction = head.directionTo(firstChild);
                 snake.turnTo(direction);
-                path.add(new Square(current.getX(), current.getY()));
                 break;
             }
             addChildren(snake, food, directions, current);
@@ -68,7 +70,7 @@ public class AstarStrategy implements SnakeStrategy {
             }
             else {
                 open.add(neighbor);
-                searchSpace.add(new Square(neighbor.getX(), neighbor.getY()));
+                searchSpace.add(neighbor);
             }
         }
     }

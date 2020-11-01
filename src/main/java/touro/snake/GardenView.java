@@ -20,10 +20,10 @@ public class GardenView extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         paintGrass(g);
-        paintFood(g);
         paintSnake(g);
         paintSearchSpace(g);
         paintPath(g);
+        paintFood(g);
     }
 
     void paintGrass(Graphics g) {
@@ -60,7 +60,7 @@ public class GardenView extends JComponent {
     }
 
     void paintSearchSpace(Graphics g){
-        g.setColor(Color.BLUE);
+        g.setColor(Color.PINK);
         for(Square s : aStarStrategy.getSearchSpace()){
             g.fillRect(s.getX()*CELL_SIZE, s.getY()*CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
