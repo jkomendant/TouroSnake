@@ -9,10 +9,10 @@ import java.util.List;
 
 public class AstarStrategy implements SnakeStrategy {
 
-    List<Node> open = new ArrayList<>();
-    List<Node> closed = new ArrayList<>();
-    List<Square> path = new ArrayList<>();
-    List<Square> searchSpace = new ArrayList<>();
+    private List<Node> open = new ArrayList<>();
+    private List<Node> closed = new ArrayList<>();
+    private List<Square> path = new ArrayList<>();
+    private List<Square> searchSpace = new ArrayList<>();
 
     @Override
     public void turnSnake(Snake snake, Garden garden) {
